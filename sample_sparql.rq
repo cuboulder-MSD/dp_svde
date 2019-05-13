@@ -1,0 +1,65 @@
+#get all triples
+select ?s ?p ?o
+
+where { graph ?g {?s ?p ?o .
+
+} }
+
+limit 100
+
+---
+#variant on above
+
+select ?g ?s ?p ?o
+
+where { 
+{?s ?p ?o}
+  UNION
+  {GRAPH ?g { ?s ?p ?o} }
+}
+limit 100
+
+---
+#find unique graphs
+
+SELECT DISTINCT ?g 
+WHERE {
+  GRAPH ?g { ?s ?p ?o }
+}
+
+limit 100
+
+---
+#version of above with specific graphs and subject
+
+select ?s ?p ?o
+
+where { graph <http://share-vde.org/sharevde/rdfBibframe/Provenance/YALE7085559> {<http://share-vde.org/sharevde/rdfBibframe/Topic/911e8211-a55e-3ee5-a43a-609b7bcb5db9> ?p ?o .
+
+} }
+
+limit 100
+
+---
+#get all classes
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+Select *
+where{
+    {?class a rdfs:Class}  
+    UNION
+  {?class a owl:Class}
+
+?class a ?classType
+}
+
+---
+#get all properties
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?p
+WHERE {
+?p a rdf:Property .
+}
