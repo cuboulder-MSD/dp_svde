@@ -56,10 +56,67 @@ where{
 }
 
 ---
-#get all properties
+#get all declared properties
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT ?p
-WHERE {
-?p a rdf:Property .
+WHERE { graph <http://share-vde.org>
+{?p a rdf:Property}
+
 }
+
+
+---
+#get all properties used 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+select Distinct ?p
+where {graph <http://share-vde.org>
+{?s ?p ?o .}
+}
+
+---
+#get all owl:sameAs statements in share-vde graphs
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+select  ?s ?p ?o
+
+where { 
+{?s ?p ?o}
+  UNION
+  {GRAPH <http://share-vde.org> { ?s owl:sameAs ?o} }
+}
+limit 100
+
+---
+#get rdfs:type (Classes)
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+select  ?s ?p ?o
+
+where { 
+{?s ?p ?o}
+  UNION
+  {GRAPH <http://share-vde.org> { ?s a ?o} }
+}
+limit 100
+
+---
+#get  rdfs:label for triples
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+select  ?s ?p ?o
+
+where { 
+{?s ?p ?o}
+  UNION
+  {GRAPH <http://share-vde.org> { ?s rdfs:label ?o} }
+}
+limit 1000
